@@ -65,10 +65,15 @@ def _dict_to_event(raw: dict[str, Any], line_num: int) -> Event | None:
     tool_output = raw.get("tool_output")
     token_usage = raw.get("token_usage")
 
+    if isinstance(ts, (int, float)):
+        ts = float(ts)
+    else:
+        ts = 0.0
+
     return Event(
         event_id=raw.get("event_id", raw.get("tool_call_id", f"ev-{line_num}")),
         event_type=event_type,
-        timestamp=float(ts),
+        timestamp=ts,
         tool_name=tool_name,
         tool_input=tool_input,
         tool_output=tool_output,
